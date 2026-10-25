@@ -7,7 +7,7 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { Screen } from '@/components/ui/Screen';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { awardXp } from '@/services/profile';
-import { createAiQuiz, fetchQuizzesForTopic } from '@/services/quiz';
+import { fetchQuizzesForTopic, generateAndPersistQuizBatch, quizTemplateForTopic } from '@/services/quiz';
 import { useAuthStore } from '@/store/auth-store';
 import type { Difficulty, QuizRow, QuizTopic } from '@/types';
 
@@ -33,10 +33,22 @@ export default function QuizPlayScreen() {
     let alive = true;
     (async () => {
       setLoading(true);
-      const base = await fetchQuizzesForTopic(topic, 8);
-      const extra = await createAiQuiz(topic, difficulty);
-      const merged = extra ? [extra, ...base] : base;
+      const base = await fetchQuizzesForTopic(topic, 16);
+      let fresh: Awaited<ReturnType<typeof generateAndPersistQuizBatch>> = [];
+      try {
+        fresh = await generateAndPersistQuizBatch({
+          topic,
+          difficulty,
+          count: 5,
+          templateId: quizTemplateForTopic(topic),
+        });
+      } catch {
+        /* Edge / OpenRouter off — banked DB questions only */
+      }
       if (!alive) return;
+      const byId = new Map<string, (typeof base)[0]>();
+      for (const r of [...fresh, ...base]) byId.set(r.id, r);
+      const merged = [...byId.values()];
       setPool(merged.length ? merged : base);
       setLoading(false);
     })();

@@ -19,8 +19,10 @@ export default function AppLayout() {
 
   useEffect(() => {
     if (!user?.id || !isSupabaseConfigured || Platform.OS === 'web') return;
-    void registerForPushAsync();
-    void scheduleDailyReminder(9, 0);
+    void (async () => {
+      await scheduleDailyReminder(9, 0);
+      await registerForPushAsync();
+    })();
   }, [user?.id]);
 
   if (user && isSupabaseConfigured && !isLoading && profile && !profile.onboarding_completed) {

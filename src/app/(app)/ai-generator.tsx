@@ -36,7 +36,11 @@ export default function AiGeneratorScreen() {
       });
       const content = (post.content ?? {}) as LinkedInPostContent;
       setDraft(content);
-      await unlockBadge(user.id, 'dev_tip_creator');
+      try {
+        await unlockBadge(user.id, 'dev_tip_creator');
+      } catch (badgeErr) {
+        if (__DEV__) console.warn('[ai-generator] unlockBadge:', badgeErr);
+      }
       if (usedFallback) {
         Alert.alert(
           'Offline draft',
@@ -44,7 +48,10 @@ export default function AiGeneratorScreen() {
         );
       }
     } catch (e) {
-      Alert.alert('AI', e instanceof Error ? e.message : 'Generation failed');
+      Alert.alert(
+        'Could not finish',
+        e instanceof Error ? e.message : 'Generation failed'
+      );
     } finally {
       setLoading(false);
     }

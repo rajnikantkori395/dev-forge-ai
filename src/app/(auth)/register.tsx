@@ -43,8 +43,24 @@ export default function RegisterScreen() {
       </View>
       <GlassCard>
         <TextField label="Display name" value={name} onChangeText={setName} placeholder="Ada Lovelace" />
-        <TextField label="Email" value={email} onChangeText={setEmail} />
-        <TextField label="Password" value={password} onChangeText={setPassword} secure />
+        <TextField
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="email"
+          textContentType="emailAddress"
+        />
+        <TextField
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secure
+          autoComplete="new-password"
+          textContentType="newPassword"
+        />
         <PrimaryButton label="Sign up" onPress={onRegister} loading={loading} />
         <Link href="/(auth)/login" asChild>
           <Pressable className="mt-4 py-2">

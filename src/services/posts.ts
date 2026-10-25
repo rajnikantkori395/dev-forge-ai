@@ -19,7 +19,9 @@ export async function saveGeneratedPost(
     })
     .select('*')
     .single();
-  if (error) throw error;
+  if (error) {
+    throw new Error(`Could not save post: ${error.message}${error.code ? ` [${error.code}]` : ''}`);
+  }
   return data as GeneratedPost;
 }
 
@@ -66,6 +68,10 @@ export async function createLinkedinDraft(input: {
     platform: input.platform,
     content,
   });
-  if (!post) throw new Error('Could not save generated post');
+  if (!post) {
+    throw new Error(
+      'Could not save post — Supabase is not configured in .env (EXPO_PUBLIC_SUPABASE_URL / EXPO_PUBLIC_SUPABASE_ANON_KEY).'
+    );
+  }
   return { post, usedFallback, fallbackReason };
 }

@@ -290,6 +290,7 @@ select * from (
       '["State or parent re-render (with new props)","Only direct DOM updates","console.log calls","Import order"]'::jsonb,
       0,
       'easy',
+      'React',
       'React reconciles when state changes or parent renders with new props.'
     )
 ) as t(question, options, correct_answer, difficulty, topic, explanation)

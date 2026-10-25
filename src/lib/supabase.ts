@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import Constants from 'expo-constants';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 
 /** SSR / static render — no session persistence. */
 const memoryAuthStorage = {
@@ -52,3 +52,11 @@ export const supabase = createClient(resolvedUrl, resolvedKey, {
     detectSessionInUrl: false,
   },
 });
+
+/** Native timers are suspended in the background, so token refresh must follow foreground state. */
+if (Platform.OS !== 'web' && isSupabaseConfigured) {
+  AppState.addEventListener('change', (state) => {
+    if (state === 'active') supabase.auth.startAutoRefresh();
+    else supabase.auth.stopAutoRefresh();
+  });
+}

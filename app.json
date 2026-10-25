@@ -2,27 +2,38 @@
   "expo": {
     "name": "DevForge AI",
     "slug": "dev-forge-ai",
+    "owner": "codewithrk",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "devforgeai",
     "userInterfaceStyle": "dark",
+    "backgroundColor": "#070a0f",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#070a0f"
+    "runtimeVersion": {
+      "policy": "appVersion"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.codewithrk.devforgeai",
+      "supportsTablet": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.codewithrk.devforgeai",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#070a0f"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "softwareKeyboardLayoutMode": "resize",
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -32,14 +43,33 @@
     "plugins": [
       "expo-router",
       [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#070a0f"
+        }
+      ],
+      [
         "expo-notifications",
         {
           "color": "#58a6ff"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6649d559-0649-40dc-9730-fd59bca132b3"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/6649d559-0649-40dc-9730-fd59bca132b3"
     }
   }
 }

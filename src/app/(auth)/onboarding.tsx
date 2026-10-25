@@ -101,7 +101,7 @@ export default function OnboardingScreen() {
             className="min-h-[88px] rounded-xl border border-forge-border bg-forge-elevated px-3 py-3 font-mono text-sm text-white"
           />
         </View>
-        <TextField label="Daily learning minutes" value={minutes} onChangeText={setMinutes} />
+        <TextField label="Daily learning minutes" value={minutes} onChangeText={setMinutes} keyboardType="number-pad" />
 
         <PrimaryButton label="Save & enter forge" onPress={save} loading={loading} />
       </GlassCard>

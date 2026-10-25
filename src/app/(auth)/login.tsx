@@ -43,8 +43,26 @@ export default function LoginScreen() {
       </View>
 
       <GlassCard>
-        <TextField label="Email" value={email} onChangeText={setEmail} placeholder="you@company.com" />
-        <TextField label="Password" value={password} onChangeText={setPassword} secure placeholder="••••••••" />
+        <TextField
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="you@company.com"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="email"
+          textContentType="emailAddress"
+        />
+        <TextField
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secure
+          placeholder="••••••••"
+          autoComplete="current-password"
+          textContentType="password"
+        />
         <PrimaryButton label="Sign in" onPress={onLogin} loading={loading} />
         <Link href="/(auth)/register" asChild>
           <Pressable className="mt-4 py-2">

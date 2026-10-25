@@ -1,9 +1,16 @@
+import { MISSION_TEMPLATE_IDS, type MissionTemplateId } from '@/lib/prompts/templates';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 import { generateDailyMissionsAi } from '@/services/ai';
 import type { DailyMission, Profile, UserMission } from '@/types';
 import { buildFallbackMissions } from '@/utils/missions-fallback';
 
 const today = () => new Date().toISOString().slice(0, 10);
+
+function missionTemplateForUser(userId: string): MissionTemplateId {
+  let h = 0;
+  for (let i = 0; i < userId.length; i++) h = (h << 5) - h + userId.charCodeAt(i);
+  return MISSION_TEMPLATE_IDS[Math.abs(h) % MISSION_TEMPLATE_IDS.length]!;
+}
 
 export async function fetchTodaysMissions(): Promise<DailyMission[]> {
   if (!isSupabaseConfigured) return [];
@@ -41,6 +48,7 @@ export async function ensureTodaysMissions(profile: Profile | null): Promise<Dai
       stack: profile.preferred_stack ?? ['TypeScript', 'React'],
       goals: profile.goals ?? 'Grow as a full-stack engineer',
       minutes: profile.daily_minutes ?? 20,
+      templateId: missionTemplateForUser(profile.id),
     });
     const missions = (ai.missions ?? []) as {
       title: string;
